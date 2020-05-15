@@ -1,1 +1,1 @@
-ex1Promise
+written by example with async/await'2'written by example with async/await

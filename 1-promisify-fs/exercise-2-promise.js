@@ -51,8 +51,7 @@ readFilePromise(sourcePath, 'utf-8')
         fs.appendFileSync(__filename, `\n// pass: ${new Date().toLocaleString()}`);
       });
     });
-  })
-  .catch((err) => console.error(err));
+  });
 })
 .catch((err) => console.error(err));
 
@@ -103,3 +102,4 @@ fs.readFile(sourcePath, `utf-8`, (err, originalSourceContent) => {
 
 
 // pass: 2020-5-15 21:44:19
+// pass: 2020-5-15 22:43:19

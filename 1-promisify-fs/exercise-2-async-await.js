@@ -27,16 +27,16 @@ const fileName2 = process.argv[3];
 const targetPath = path.join(__dirname, fileName2);
 log(2, targetPath);
 
-const readCopyAssert = async (toCopy) => {
+const readCopyAssert = async (toCopy, fromCopy) => {
   try {
     log(3, `reading original contents from ${fileName1} ...`);
-    const originalSourceContent = await readFilePromise(sourcePath, 'utf-8');
+    const originalSourceContent = await readFilePromise(fromCopy, 'utf-8');
 
     log(4, `copying to ${fileName2} ...`);
-    await copyFilePromise(sourcePath, toCopy);
+    await copyFilePromise(fromCopy, toCopy);
 
     log(5, `reading ${fileName1} ...`);
-    const sourceContent = await readFilePromise(sourcePath, 'utf-8');
+    const sourceContent = await readFilePromise(fromCopy, 'utf-8');
 
     log(6, `asserting ${fileName1} ...`);
     assert.strictEqual(sourceContent, originalSourceContent);
@@ -55,7 +55,7 @@ const readCopyAssert = async (toCopy) => {
     console.error(err);
   };
 };
-readCopyAssert(targetPath);
+readCopyAssert(targetPath, sourcePath);
 /*log(3, `reading original contents from ${fileName1} ...`);
 fs.readFile(sourcePath, `utf-8`, (err, originalSourceContent) => {
   if (err) {
@@ -103,3 +103,4 @@ fs.readFile(sourcePath, `utf-8`, (err, originalSourceContent) => {
 
 
 // pass: 2020-5-15 21:43:12
+// pass: 2020-5-15 22:27:06

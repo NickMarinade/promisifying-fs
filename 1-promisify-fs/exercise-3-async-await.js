@@ -2,7 +2,7 @@
 const fs = require(`fs`);
 const path = require(`path`);
 const assert = require(`assert`);
-
+const util = require('util');
 // declare constants
 const EXERCISE_NAME = path.basename(__filename);
 const START = Date.now();
@@ -13,6 +13,8 @@ const log = (logId, value) => console.log(
   value,
 );
 
+const readFilePromise = util.promisify(fs.readFile);
+const appendFilePromise = util.promisify(fs.appendFile);
 
 // --- main script ---
 console.log(`\n--- ${EXERCISE_NAME} ---`);
@@ -25,7 +27,33 @@ const fileName2 = process.argv[3];
 const fileToAppend = path.join(__dirname, fileName2);
 log(2, fileToAppend);
 
-log(3, `reading original contents from ${fileName2} ...`);
+const appendAssert = async (toAppend, toRead) => {
+  try {
+    log(3, `reading original contents from ${fileName2} ...`);
+    const oldContents = await readFilePromise(toAppend, 'utf-8');
+
+    log(4, `reading from ${fileName1} ...`);
+    const contentToAppend = await readFilePromise(toRead, 'utf-8');
+
+    log(5, `writing to ${fileName2} ...`);
+    await appendFilePromise(toAppend, contentToAppend);
+
+    log(6, `reading from ${fileName2} ...`);
+    const newContent = await readFilePromise(toAppend, 'utf-8');
+
+    log(7, `asserting ...`);
+    assert.strictEqual(newContent, oldContents + contentToAppend);
+
+    log(8, '\033[32mpass!\x1b[0m');
+    fs.appendFileSync(__filename, `\n// pass: ${(new Date()).toLocaleString()}`);
+  
+  } catch (err) {
+    console.error(err);
+  };
+};
+appendAssert(fileToAppend, fileToRead);
+
+/*log(3, `reading original contents from ${fileName2} ...`);
 fs.readFile(fileToAppend, `utf-8`, (err, oldContents) => {
   if (err) {
     console.error(err);
@@ -62,7 +90,9 @@ fs.readFile(fileToAppend, `utf-8`, (err, oldContents) => {
 
   });
 
-});
+});*/
 
 
 
+
+// pass: 2020-5-15 22:35:40
