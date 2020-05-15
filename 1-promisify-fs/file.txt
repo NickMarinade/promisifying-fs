@@ -1,1 +1,1 @@
-undefined
+written by example with async/await
