@@ -29,6 +29,7 @@ const fileName2 = process.argv[3];
 const filePath2 = path.join(__dirname, fileName2);
 log(2, filePath2);
 
+log(3, `reading ${fileName1} ...`);
 readFilePromise(filePath1, 'utf-8')
 .then((oldFile1) => {
   log(4, `reading ${fileName2} ...`);
